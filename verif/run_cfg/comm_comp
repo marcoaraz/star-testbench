@@ -1,0 +1,7 @@
+vlogan -sverilog -kdb -full64 +v2k  -timescale=1ns/1ps +incdir+$PRJROOT/verif/sv +incdir+$PRJROOT/verif/top +incdir+$PRJROOT/verif/tests +incdir+$PRJROOT/verif/dep +incdir+$PRJROOT/verif/dep/common/sv +incdir+$DESIGNWARE_HOME/vip/svt/uart_svt/P-2019.06/sverilog/include +incdir+$PRJROOT/verif/sv/ioc_lvds_env +incdir+$PRJROOT/verif/sv/uart_svt -work libtest +define+PWR_TEST -file $PRJROOT/verif/run_cfg/filelists/verif_testfiles.f -ntb_opts uvm
+
+
+
+
+
+vlogan -sverilog -kdb -full64 +v2k  -timescale=1ns/1ps +incdir+$PRJROOT/verif/sv +incdir+$PRJROOT/vercomm_verif.makecomm_verif.makeif/top +incdir+$PRJROOT/verif/tests +incdir+$PRJROOT/verif/dep +incdir+$PRJROOT/verif/dep/common/sv +incdir+$DESIGNWARE_HOME/vip/svt/uart_svt/P-2019.06/sverilog/include +incdir+$PRJROOT/verif/sv/ioc_lvds_env  -work libtest +define+PWR_TEST -file $PRJROOT/verif/run_cfg/filelists/verif_testfiles.f -ntb_opts uvm
