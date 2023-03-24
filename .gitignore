@@ -30,6 +30,3 @@ design/dw
 design/merge
 design/*
 verif/tests_bk
-verif/run_cfg/vcs_mx
-verif/run_cfg/verdi_config_file
-verif/run_cfg/synopsys_sim.setup
