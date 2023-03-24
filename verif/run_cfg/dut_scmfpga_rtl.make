@@ -25,9 +25,9 @@ COMP_VLOG_OPT += -timescale=1ns/1ps
 COMP_VLOG_OPT += +incdir+$(UVM_HOME)/src
 COMP_VLOG_OPT += -ntb_opts uvm
 
-$(info [INFO: AVC] Using VCS-MX, CODE_COVERAGE   FLAGs: $(CODE_COVERAGE) )
-$(info [INFO: AVC] Using VCS-MX, FUNC_COVERAGE   FLAGs: $(FUNC_COVERAGE) )
-$(info [INFO: AVC] Using VCS-MX, VERILOG Compile FLAGs: $(COMP_VLOG_OPT) )
+$(info [INFO: NFPGA] Using VCS-MX, CODE_COVERAGE   FLAGs: $(CODE_COVERAGE) )
+$(info [INFO: NFPGA] Using VCS-MX, FUNC_COVERAGE   FLAGs: $(FUNC_COVERAGE) )
+$(info [INFO: NFPGA] Using VCS-MX, VERILOG Compile FLAGs: $(COMP_VLOG_OPT) )
 
 COMP_VLOG = @vlogan $(COMP_VLOG_OPT) 
 COMP_SVLOG = @vlogan $(COMP_VLOG_OPT) -sverilog 
@@ -35,21 +35,21 @@ COMP_VCS = @vcs -full64 -ucli  -debug_access+all -ntb_opts uvm +lint=all
 
 # Directory handles
 # -------------------------------------------------------------------------------------------------
-CPU_DIR  = $(RTL_PATH)/cpufpga
-QUAR_DIR = $(RTL_PATH)/cpufpga/quartus_ip
+SCM_DIR  = $(RTL_PATH)/scmfpga
+QUAR_DIR = $(RTL_PATH)/scmfpga/quartus_ip
 LIB_DIR  = $(RTL_PATH)/lib
 ALTLIB_DIR = $(QUARTUS_INSTALL_DIR)/eda/sim_lib
 
 INC_DIR  = +incdir+$(LIB_DIR)/LVDS
 INC_DIR  += +incdir+$(LIB_DIR)/RSU
-INC_DIR  += +incdir+$(LIB_DIR)/dependence
+INC_DIR  += +incdir+$(LIB_DIR)/dependece
 INC_DIR  += +incdir+$(LIB_DIR)/espi_slave
 INC_DIR  += +incdir+$(LIB_DIR)/glitchfilter
 INC_DIR  += +incdir+$(LIB_DIR)/quartus_ip/i2c_slave
-INC_DIR  += +incdir+$(CPU_DIR)
+INC_DIR  += +incdir+$(SCM_DIR)
 INC_DIR  += +incdir+$(QUAR_DIR)
-INC_DIR  += +incdir+$(CPU_DIR)/src/top
-INC_DIR  += +incdir+$(CPU_DIR)/includes
+INC_DIR  += +incdir+$(SCM_DIR)/src/top
+INC_DIR  += +incdir+$(SCM_DIR)/includes
 
 LIB_RTL ?= libavc
 
@@ -67,12 +67,8 @@ compile_altera:
 	$(COMP_VLOG)  -work fiftyfivenm_ver   $(ALTLIB_DIR)/synopsys/fiftyfivenm_atoms_ncrypt.v
 
 compile_lib:
-	$(COMP_VLOG)  -work $(LIB_RTL)	$(INC_DIR) -file $(PRJROOT)/verif/run_cfg/filelists/lib_files.f
+	$(COMP_SVLOG)  -work $(LIB_RTL)	$(INC_DIR) -file $(PRJROOT)/verif/run_cfg/filelists/dut_lib_files.f
 
 compile_rtl:
-	$(COMP_SVLOG)  -work $(LIB_RTL)	$(INC_DIR) -file $(PRJROOT)/verif/run_cfg/filelists/cpufpga_rtlfiles.f
-
-
-
-
+	$(COMP_SVLOG)  -work $(LIB_RTL)	$(INC_DIR) -file $(PRJROOT)/verif/run_cfg/filelists/dut_scmfpga_rtlfiles.f
 

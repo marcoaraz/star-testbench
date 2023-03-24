@@ -88,7 +88,13 @@ prep:    setup_tools setup_altera setup_rtl setup_verif
 comp:    compile_rtl compile_verif
 
 # -------------------------------------------------------------------------------------------------
-#  CLEAN TARGETS
+#  TOOLS SETUP AND LIBS 
+
+setup_tools: 
+	$(CFG_DIR)/vcs_mx/setup.sh
+
+# -------------------------------------------------------------------------------------------------
+# COMPILING EVERYTHING FOR RTL
 
 clean_altera: \
 	rm_altera_ver       \
@@ -101,18 +107,10 @@ clean_altera: \
 clean_rtl: \
 	rm_libavc   
 
-clean_verif: \
-	rm_libtest
-
 clean_tmp: 
 	rm -rf $(LIBRARY_DIR) \
 	rm -rf vhdlanLog csrc simv.daidir simv work.lib++ AN.DB 64 *log vc_hdrs.h
 
-# -------------------------------------------------------------------------------------------------
-#  SETUP TARGETS
-
-setup_tools: 
-	$(CFG_DIR)/vcs_mx/setup.sh
 
 setup_altera: \
 	vlib_altera_ver       \
@@ -125,24 +123,27 @@ setup_altera: \
 setup_rtl: \
 	vlib_libavc   
 
-setup_verif: \
-	vlib_libtest
-
-# -------------------------------------------------------------------------------------------------
-# COMPILING EVERYTHING
-
 compile_rtl: \
 	$(info [INFO: AVC] Compile ALL FPGA param: $(top_rtl_param) )
-	@$(MAKE)                             -f cpufpga_rtl.make $(top_rtl_param) all 
-	@$(MAKE)                             -f scmfpga_rtl.make $(top_rtl_param)
-	@$(MAKE)                             -f debugfpga_rtl.make $(top_rtl_param)     
+	@$(MAKE)                             -f dut_cpufpga_rtl.make $(top_rtl_param) all 
+	@$(MAKE)                             -f dut_scmfpga_rtl.make $(top_rtl_param)
+	@$(MAKE)                             -f dut_debugfpga_rtl.make $(top_rtl_param)   
+
+# -------------------------------------------------------------------------------------------------
+# COMPILING EVERYTHING FOR TESTBENCH
+
+clean_verif: \
+	rm_libtest
+
+setup_verif: \
+	vlib_libtest  
 
 compile_verif: \
-	$(info [INFO: AVC] Compile CPU FPGA param: $(top_verif_param) )
-	@$(MAKE)                             -f cosim_test.make $(top_verif_param) 
 	$(info [INFO: AVC] Compile DEP FPGA param: $(top_verif_param) )
-	@$(MAKE)                             -f comm_verif.make $(top_verif_param)
-
+	@$(MAKE)                             -f testbench_src.make $(top_verif_param)
+	$(info [INFO: AVC] Compile CPU FPGA param: $(top_verif_param) )
+	@$(MAKE)                             -f testbench_top.make $(top_verif_param) 
+	
 vlib_%:
 	mkdir -p $(LIBRARY_DIR)/$(subst vlib_,,$@)
 	@echo "$(subst vlib_,,$@) : $(LIBRARY_DIR)/$(subst vlib_,,$@)"   >>  $(LIBRARY_DIR)/../synopsys_sim.setup;

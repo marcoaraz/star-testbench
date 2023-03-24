@@ -83,23 +83,15 @@ COMP_VLOG = @vlogan $(COMP_VLOG_OPT)
 COMP_SVLOG = @vlogan $(COMP_VLOG_OPT) -sverilog $(COMP_UVM_OPT)
 COMP_VCS = @vcs  $(COMP_VCS_OPT) $(VCS_DEBUG_FLAGS) +warn=noFCICIO
 
-TB_ARG = 
-
-ifdef BMC_IIC
-   TB_ARG += +define+BMC_IIC
-endif
-
-$(info [INFO: AVC] Testbench Compile FLAGs: $(TB_ARG) )
-
 # ------------------------------------------------------------------------------
 # COMPILING EVERYTHING FOR RTL
 
 # ------------------------------------------------------------------------------
 # start to compile all
 
-.PHONY: all compile uvm dep sv
+.PHONY: all compile uvm sv
 
-all:  uvm dep sv
+all:  uvm sv
 
 #not need compile uvm when add "-ntb_opts uvm" to vlogan 
 uvm:
@@ -108,8 +100,5 @@ uvm:
 	$(COMP_SVLOG)  -ntb_opts uvm
 	$(info [INFO: AVC] done uvm)
 
-dep:
-	$(COMP_SVLOG)  $(INC_DIR) -work libtest  $(TB_ARG) -file $(PRJROOT)/verif/run_cfg/filelists/dep_files.f
-
 sv:
-	$(COMP_SVLOG)  $(INC_DIR) -work libtest  $(TB_ARG) -file $(PRJROOT)/verif/run_cfg/filelists/verif_testfiles.f
+	$(COMP_SVLOG)  $(INC_DIR) -work libtest -file $(PRJROOT)/verif/run_cfg/filelists/testbench_src_files.f

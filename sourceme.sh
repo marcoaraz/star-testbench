@@ -207,7 +207,9 @@ do
   left=${arr[0]}
   right=${arr[1]}
 
-  if [ "$left" = "VCS_HOME" ]; then 
+  if [ "$left" = "QUARTUS_INSTALL_DIR" ]; then
+    export QUARTUS_INSTALL_DIR=$right
+  elif [ "$left" = "VCS_HOME" ]; then 
     export VCS_HOME=$right
     export PATH=$VCS_HOME/bin:$PATH
   else

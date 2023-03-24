@@ -69,10 +69,10 @@ compile_altera:
 	$(COMP_VLOG)  -work fiftyfivenm_ver   $(ALTLIB_DIR)/synopsys/fiftyfivenm_atoms_ncrypt.v
 
 compile_lib:
-	$(COMP_VLOG)  -work $(LIB_RTL)	$(INC_DIR) -file $(PRJROOT)/verif/run_cfg/filelists/lib_files.f
+	$(COMP_VLOG)  -work $(LIB_RTL)	$(INC_DIR) -file $(PRJROOT)/verif/run_cfg/filelists/dut_lib_files.f
 
 compile_rtl:
-	$(COMP_SVLOG)  -work $(LIB_RTL)	$(INC_DIR) -file $(PRJROOT)/verif/run_cfg/filelists/debugfpga_rtlfiles.f
+	$(COMP_SVLOG)  -work $(LIB_RTL)	$(INC_DIR) -file $(PRJROOT)/verif/run_cfg/filelists/dut_debugfpga_rtlfiles.f
 
 
 

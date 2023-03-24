@@ -1,0 +1,69 @@
+REGRESSION = 0
+COV = 0
+GUI = 0
+CASE_NAME = 
+LOG_NAME = $(TEST_NAME)_$(CASE_NAME)
+seed = NULL
+
+ESPI_TRACE = 0
+
+TIME_RECORD_FILE = 
+
+ifeq ($(seed),NULL)
+   seed := $(shell shuf -i 10000000-99999999 -n 1  )
+else
+endif
+#seed = 000
+$(info Using seed: $(seed) )
+
+SIMV_OPT  = +firmware_size=12268
+
+ifeq ($(REGRESSION),0)
+SIMV_OPT += -verdi
+endif
+
+
+SIMV_OPT += -licqueue
+SIMV_OPT += +ntb_random_seed=$(seed)
+#SIMV_OPT += +UVM_VERBOSITY=UVM_MEDIUM
+SIMV_OPT += +UVM_VERBOSITY=UVM_LOW
+#SIMV_OPT += +UVM_VERBOSITY=UVM_HIGH
+SIMV_OPT += +UVM_TESTNAME=$(TEST_NAME)
+
+ifeq ($(REGRESSION),0)
+SIMV_OPT += +fsdbfile+$(TEST_NAME)_$(seed).fsdb
+SIMV_OPT += +vpdfile+$(TEST_NAME)_$(seed).vpd
+endif
+
+ifeq ($(COV),1)
+	SIMV_OPT += -cm tgl+line+cond+fsm+branch+assert -cm_name $(TEST_NAME)_$(seed)
+endif 	
+
+ifeq ($(REGRESSION),1)
+	SIMV_OPT += -l $(LOG_PATH)/$(LOG_NAME)_seed_$(seed).log
+else 	
+	SIMV_OPT += -l $(LOG_NAME)_seed_$(seed).log
+endif
+
+SIMV_OPT += +ESPI_TRACE=$(ESPI_TRACE)
+
+	
+$(info Using SIMV OPTION: $(SIMV_OPT) )
+
+.PHONY: sim   
+
+reg: startReg sim endReg
+
+sim:
+	ln -s -f $(PRJROOT)/verif/run_cfg/simv.daidir .
+	simv $(SIMV_OPT)
+
+startReg:
+	@echo -n "Test case name: "$(TEST_NAME), "seed: "$(seed), "start time:: "`date +%y-%m-%d-%H:%M:%S`, "start timestamp: "`date +%s`,  >> $${TIME_RECORD_FILE}
+
+endReg:
+	@echo " end time:: "`date +%y-%m-%d-%H:%M:%S`, "end timestamp: "`date +%s` >> $${TIME_RECORD_FILE}
+
+
+clean:
+	rm -rf novas* simv.daidir *.fsdb *.vpd *.log ucli.key verdiLog DVEfiles
