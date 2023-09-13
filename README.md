@@ -1,5 +1,7 @@
-Verification Environment framework for OHS  
+Verification Environment framework for OKS  
 Using Universal Verification Methodology  
 Latest version in branch main  
-Main contact: Marco Antonio Ramirez Zepeda marco.a.ramirez.zepeda@intel.com  
+Contact:  
+Marco Antonio Ramirez Zepeda marco.a.ramirez.zepeda@intel.com  
+Paola Rangel Vega paola.rangel.vega@intel.com
 11/1/2023  
